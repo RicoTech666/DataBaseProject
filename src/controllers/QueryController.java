@@ -26,6 +26,24 @@ public class QueryController {
                         "INNER JOIN subject as t2\n" +
                         "INNER JOIN score as t3 \n" +
                         "on t1.id = t3.student_id AND t2.id = t3.subject_id AND t2.teacher =" + sc.next();
+            case "1.1.4":
+                System.out.println("请输入具体要查询的课程名称：");
+                return "SELECT t2.subject,t1.name,t3.score FROM student as t1\n" +
+                        "INNER JOIN subject as t2\n" +
+                        "INNER JOIN score as t3 \n" +
+                        "on t1.id = t3.student_id AND t2.id = t3.subject_id t2.subject =" + sc.next();
+            case "1.2.1":
+                return "SELECT * FROM subject";
+            case "1.2.2":
+                return "SELECT subject FROM subject";
+            case "1.2.3":
+                System.out.println("请输入具体要查询的老师姓名：");
+                return "SELECT subject，teacher FROM subject WHERE teacher =" + sc.next();
+            case "1.3.1":
+                return "SELECT teacher,subject FROM subject";
+            case "1.3.2":
+                System.out.println("请输入要查询的老师姓名：");
+                return "SELECT teacher,subject FROM subject WHERE teacher =" + sc.next();
             default:
                 System.out.println("对不起，您的输入有误，无此对应查找项目");
                 return "";
