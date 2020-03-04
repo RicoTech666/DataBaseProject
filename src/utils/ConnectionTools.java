@@ -42,10 +42,10 @@ public class ConnectionTools {
         return statement;
     }
 
-     ResultSet executeSQL(Statement statement) {
+     ResultSet executeSQL(Statement statement, String sqlQuery) {
         ResultSet rs = null;
         try {
-            rs = statement.executeQuery("SELECT name, age, sex FROM student");
+            rs = statement.executeQuery(sqlQuery);
         } catch (SQLException e) {
             System.out.println("查询失败！");
         }
