@@ -1,14 +1,19 @@
 package controllers;
 
 public class LoginController {
-    private final String adminUserName = "张三";
-    private final String adminPassword = "123";
+    private String loginInput;
 
-    public LoginController() {
-        System.out.println("您好，欢迎登陆学生考试系统，请输入您的用户名和密码(用户名:密码)：");
+    public LoginController(String loginInput) {
+        this.loginInput = loginInput;
     }
-    public void loginCheck(String userName,String password) {
-        if(userName.equals(adminUserName)&&password.equals(adminPassword)) {
+
+    public void loginCheck() {
+        String adminUserName = "张三";
+        String adminPassword = "123";
+
+        String userName = loginInput.split(":")[0];
+        String password = loginInput.split(":")[1];
+        if (userName.equals(adminUserName) && password.equals(adminPassword)) {
             System.out.println("您好，超级管理员，请选择你需要进行的操作：\n" +
                     "1. 查询\n" +
                     "\t1.1 查询学生信息以及成绩\n" +

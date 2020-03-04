@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ConnectionUtil {
+public class ConnectionTools {
     private static final String URL = "jdbc:mysql://localhost:3306/student_examination_sys?useSSL=false";
     private static final String NAME = "root";
     private static final String PASSWORD = "123456";
@@ -76,4 +76,6 @@ public class ConnectionUtil {
             }
         }
     }
+
+
 }
