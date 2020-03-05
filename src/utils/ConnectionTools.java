@@ -12,7 +12,7 @@ public class ConnectionTools {
     private static final String PASSWORD = "123456";
 
 
-     Connection getConnect() {
+    public Connection getConnect() {
         try {
             //加载驱动
             Class.forName("com.mysql.jdbc.Driver");
@@ -31,7 +31,7 @@ public class ConnectionTools {
         return conn;
     }
 
-     Statement getStatement(Connection connection) {
+    public Statement getStatement(Connection connection) {
         Statement statement = null;
         try {
             statement = connection.createStatement();
@@ -42,7 +42,7 @@ public class ConnectionTools {
         return statement;
     }
 
-     ResultSet executeSQL(Statement statement, String sqlQuery) {
+    public ResultSet executeDQL(Statement statement, String sqlQuery) {
         ResultSet rs = null;
         try {
             rs = statement.executeQuery(sqlQuery);
@@ -53,14 +53,17 @@ public class ConnectionTools {
         return rs;
     }
 
-     static void closeConnect(ResultSet rs, Statement st, Connection conn) {
-        if (rs != null) {   // 关闭记录集
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public int executeDMLORDDL(Statement statement, String sqlQuery) {
+        int result = 0;
+        try {
+            result = statement.executeUpdate(sqlQuery);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return result;
+    }
+
+    public static void closeConnect(Statement st, Connection conn) {
         if (st != null) {   // 关闭声明
             try {
                 st.close();
@@ -77,5 +80,15 @@ public class ConnectionTools {
         }
     }
 
+    public static void closeConnect(ResultSet rs, Statement st, Connection conn) {
+        if (rs != null) {   // 关闭记录集
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        closeConnect(st, conn);
+    }
 
 }
