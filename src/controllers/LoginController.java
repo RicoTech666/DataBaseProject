@@ -1,13 +1,13 @@
 package controllers;
 
-public class LoginController {
+class LoginController {
     private String loginInput;
 
-    public LoginController(String loginInput) {
+    LoginController(String loginInput) {
         this.loginInput = loginInput;
     }
 
-    public void loginCheck() {
+    void loginCheck() {
         String adminUserName = "张三";
         String adminPassword = "123";
 

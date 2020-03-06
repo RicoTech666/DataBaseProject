@@ -1,15 +1,13 @@
 package controllers;
 
 import utils.ConnectionTools;
-import utils.SqlQueryUtil;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-public class QueryController {
+class QueryController {
     private String inputQueryType;
 
     QueryController(String inputQueryType) {
@@ -61,7 +59,6 @@ public class QueryController {
                 String studentAge = stuInfo.split("，")[2].split("：")[1].trim();
                 String studentGender = stuInfo.split("，")[3].split("：")[1].trim();
 
-                System.out.println("添加学生[ " + studentName + studentId + " ]成功！");
                 return "INSERT INTO student (id,name,age,sex)\n" +
                         "VALUES(" + studentId + ",\"" + studentName + "\"," + studentAge + ",\"" + studentGender +
                         "\")";
@@ -72,7 +69,6 @@ public class QueryController {
                 String subjectName = subjectInfo.split("，")[1].split("：")[1].trim();
                 String subjectTeacher = subjectInfo.split("，")[2].split("：")[1].trim();
 
-                System.out.println("添加科目[ " + subjectName + subjectId + " ]成功！");
                 return "INSERT INTO subject (id,subject,teacher)\n" +
                         "VALUES(" + subjectId + ",\"" + subjectName + "\",\"" + subjectTeacher + "\")";
             case "2.3":
@@ -82,7 +78,6 @@ public class QueryController {
                 String teacherName = teacherInfo.split("，")[1].split("：")[1].trim();
                 String teacherSalary = teacherInfo.split("，")[2].split("：")[1].trim();
 
-                System.out.println("添加老师[ " + teacherName + teacherId + " ]成功！");
                 return "INSERT INTO teacher (id,name,salary)\n" +
                         "VALUES(" + teacherId + ",\"" + teacherName + "\"," + teacherSalary + ")";
             case "2.4":
@@ -90,11 +85,10 @@ public class QueryController {
                 String scoreInfo = sc.next();
                 String scoreStu = scoreInfo.split("，")[0].split("：")[1].trim();
                 String scoreSubj = scoreInfo.split("，")[1].split("：")[1].trim();
-                String scoreVal = scoreInfo.split("，")[2].split("，")[1].trim();
+                String scoreVal = scoreInfo.split("，")[2].split("：")[1].trim();
 
-                System.out.println("添加成绩成功！");
                 return "INSERT INTO score (student_id,subject_id,score)\n" +
-                        "SELECT t1.id,t2.id," + scoreVal + "FROM student AS t1\n" +
+                        "SELECT t1.id,t2.id,\'" + scoreVal + "\'FROM student AS t1\n" +
                         "INNER JOIN subject AS t2\n" +
                         "ON t1.name = \"" + scoreStu + "\"AND t2.subject = \"" + scoreSubj + "\"";
             case "3.1":
@@ -130,14 +124,14 @@ public class QueryController {
                 String scoreInfoAlter = sc.next();
                 String scoreStuAlter = scoreInfoAlter.split("，")[0].split("：")[1].trim();
                 String scoreSubjAlter = scoreInfoAlter.split("，")[1].split("：")[1].trim();
-                String scoreValAlter = scoreInfoAlter.split("，")[2].split("，")[1].trim();
+                String scoreValAlter = scoreInfoAlter.split("，")[2].split("：")[1].trim();
 
                 return "UPDATE score,\n" +
                         "(SELECT t1.id AS stu_id, t2.id AS subj_id FROM student as t1\n" +
                         "INNER JOIN subject AS t2\n" +
                         "INNER JOIN score AS t3\n" +
-                        "ON t1.id = t3.student_id AND t2.id = t3.subject_id AND t1.name =\"" + scoreSubjAlter + "\"\n" +
-                        "AND t2.subject=\"" + scoreStuAlter + "\")AS score_info\n" +
+                        "ON t1.id = t3.student_id AND t2.id = t3.subject_id AND t1.name =\"" + scoreStuAlter + "\"\n" +
+                        "AND t2.subject=\"" + scoreSubjAlter + "\")AS score_info\n" +
                         "SET score.score = " + scoreValAlter + " WHERE score.student_id = score_info.stu_id\n" +
                         "AND score.subject_id = score_info.subj_id";
             case "4.1":
@@ -148,9 +142,9 @@ public class QueryController {
                     System.out.println("请输入要删除的学生信息：(例：学号：1001)");
                     String stuIdDelete = sc.next().split("：")[1].trim();
 
-                    System.out.println("删除学生 " + stuIdDelete + " 成功！");
                     return "DELETE FROM student where id=" + stuIdDelete;
                 } else {
+                    System.out.println("您选择了否，将退出程序！");
                     return "";
                 }
             case "4.2":
@@ -161,9 +155,9 @@ public class QueryController {
                     System.out.println("请输入要删除的课程信息：(例：课程号：1001)");
                     String subjIdDelete = sc.next().split("：")[1].trim();
 
-                    System.out.println("删除课程 " + subjIdDelete + " 成功！");
                     return "DELETE FROM subject where id=" + subjIdDelete;
                 } else {
+                    System.out.println("您选择了否，将退出程序！");
                     return "";
                 }
             case "4.3":
@@ -174,19 +168,18 @@ public class QueryController {
                     System.out.println("请输入要删除的老师信息：(例：老师编号： 1001)");
                     String teacherIdDelete = sc.next().split("：")[1].trim();
 
-                    System.out.println("删除老师 " + teacherIdDelete + " 成功！");
                     return "DELETE FROM teacher where id=" + teacherIdDelete;
                 } else {
+                    System.out.println("您选择了否，将退出程序！");
                     return "";
                 }
 
             default:
-                System.out.println("对不起，您的输入有误，无此对应查找项目");
                 return "";
         }
     }
 
-    public void printResultToUser() throws SQLException {
+     void printResultToUser() throws SQLException {
         String sqlTranslated = translateInputToQuery();
         ConnectionTools connectionTools = new ConnectionTools();
         Connection connection = connectionTools.getConnect();
@@ -257,11 +250,27 @@ public class QueryController {
                 ConnectionTools.closeConnect(rs, statement, connection);
                 break;
             case "2.1":
+            case "2.2":
+            case "2.3":
+            case "2.4":
+            case "3.1":
+            case "3.2":
+            case "3.3":
+            case "3.4":
+            case "4.1":
+            case "4.2":
+            case "4.3":
                 int result = connectionTools.executeDMLORDDL(statement, sqlTranslated);
                 if (result > 0) {
                     System.out.println("操作成功！");
+                } else {
+                    System.out.println("操作失败！");
                 }
                 ConnectionTools.closeConnect(statement,connection);
+                break;
+            default:
+                ConnectionTools.closeConnect(statement,connection);
+                System.out.println("对不起，您的输入有误，无此对应查找项目");
         }
 
     }
